@@ -16,6 +16,8 @@
   * Force update of door status at the time of activation instead of waiting for the periodic update.
   * Add the duration that the door has not been closed to the notification.
 
+  * August 2020  V2.1
+  * Bug fix on notification time.
 */
 
 /* Comment this out to disable prints and save space */
@@ -182,7 +184,7 @@ void InitialiseDoor()
     Blynk.virtualWrite(V1, "INITIALISING"); // Show status as Initialising on the app
     Blynk.virtualWrite(V2, " "); // Blank the occupancy status on the app
     Blynk.virtualWrite(V5, " "); // Blank the ultrasonic distance wiget
-    Blynk.virtualWrite(V3, "V2.0");  // Display Version on app
+    Blynk.virtualWrite(V3, "V2.1");  // Display Version on app
 
     if (digitalRead(kClosedPin) != HIGH) // Door not closed
     {
@@ -277,7 +279,10 @@ void DetermineDoorStatus(int CurrentDoorStatus)
             int CurrentInterval = (millis() - DoorOpenedTime) / kFiveMins;
              if (CurrentInterval > IntervalCount)
             {
-                Blynk.notify("Minutes The Garage Door Has Now Been Open = " + (CurrentInterval * 5));
+                String s = "The Garage Door Has Now Been Open for ";
+                s = s + (CurrentInterval * 5);
+                s = s + " minutes.";
+                Blynk.notify(s);
 
                 IntervalCount = CurrentInterval;
             }
