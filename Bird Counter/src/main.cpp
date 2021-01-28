@@ -41,6 +41,23 @@ BlynkTimer SensorTimer; // Timer - Check sensor at defined intervals
 int SensorValue; // Value read from the IR Sensor
 
 // --------------------------------------------------------------------------------------------------------------------------------------
+  void LogActivity(int SensorValue) {
+    
+  }
+
+// Monitor the sensor
+void MonitorBox() {
+  digitalWrite(kirLed, HIGH);
+  delay(2); // Short duration for light to stabalise
+  SensorValue = analogRead(ksensor);
+  digitalWrite(kirLed, LOW);
+        Serial.print("The sensor is reading ");
+        Serial.println(SensorValue);
+
+  if (SensorValue < ksensorThreshold){
+    LogActivity(SensorValue);
+  }
+}
 
 // Main Setup code
 void setup() {
@@ -65,7 +82,7 @@ void setup() {
   // Blynk.config(auth);
   Blynk.config(BLYNK_AUTH_TOKEN);
 
-  SensorTimer.setInterval(ksampleInterval, MonitorBox); // Monitor birdbox entrance
+SensorTimer.setInterval(ksampleInterval, MonitorBox); // Monitor birdbox entrance
 
   ArduinoOTA.setHostname("birdbox-counter");
   // No authentication by default
@@ -107,24 +124,6 @@ void setup() {
 
 }
 
-
-
-// Monitor the sensor
-void MonitorBox() {
-  digitalWrite(kirLed, HIGH);
-  delay(2); // Short duration for light to stabalise
-  SensorValue = analogRead(ksensor);
-  digitalWrite(kirLed, LOW);
-          Serial.print("The sensor is reading ");
-        // Serial.print(SensorValue);
-
-  if (SensorValue < ksensorThreshold){
-    LogActivity(SensorValue);
-  }
-}
-  void LogActivity(int SensorValue){
-    
-  }
 
 // Main Loop -------------------------------------------------------------------------------------------------
 void loop() {
